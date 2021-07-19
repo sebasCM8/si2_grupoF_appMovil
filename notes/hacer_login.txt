@@ -1,0 +1,7 @@
+para el login tenemos que usar: 
+https://laboratoriosi.andresmontano.website/api/login
+con user: 
+TELCHI-sebastiansito5
+y password: 123
+
+200 ok y si no 401

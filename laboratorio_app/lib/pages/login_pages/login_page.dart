@@ -34,23 +34,16 @@ class _LoginPageState extends State<LoginPage> {
     return new Timer(duration, _goToMenuPage);
   }
 
-  void _ingresarBtn() {
+  void _ingresarBtn() async{
     setState(() {
       ingresando = 1;
     });
     if (isNotEmpty(userController.text) &&
         isNotEmpty(passwordController.text)) {
-      if (userController.text == 'admin' && passwordController.text == "123") {
-        _user = Usuario(
-            "admin",
-            "123",
-            1,
-            "Admin",
-            "123321",
-            "av crsitobal colon",
-            "admin321@gmail.com",
-            "7227332",
-            "2021-02-23");
+      Usuario user = Usuario.fromLogin(userController.text, passwordController.text);
+      int response = await Usuario.loginUser(user);
+      if (response == 1) {
+        _user = user;
         startTimer();
       } else {
         wrongDataDialog(context, "Usuario no encontrado", 0);
@@ -59,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     } else {
-      wrongDataDialog(context, "Datos erronos", 0);
+      wrongDataDialog(context, "Datos erroneos", 0);
       setState(() {
         ingresando = 0;
       });

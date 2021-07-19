@@ -17,6 +17,10 @@ class _MenuPageState extends State<MenuPage> {
     _user = widget.user;
   }
 
+  void _goFacturas(){
+    Navigator.pushNamed(context, 'facturasPage', arguments: _user);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +58,9 @@ class _MenuPageState extends State<MenuPage> {
                 ),
                 title: Text("Reserva")),
             ListTile(
-                leading: Icon(Icons.logout, color: Colors.red),
-                title: Text("Salir"))
+                leading: Icon(Icons.book, color: Colors.red),
+                title: Text("Mis facturas"),
+                onTap: _goFacturas,),
           ],
         ),
       ),
