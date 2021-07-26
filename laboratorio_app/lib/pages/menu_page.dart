@@ -21,6 +21,14 @@ class _MenuPageState extends State<MenuPage> {
     Navigator.pushNamed(context, 'facturasPage', arguments: _user);
   }
 
+  void _irAnalisis(){
+    Navigator.pushNamed(context, 'analisisPage', arguments: _user);
+  }
+
+  void _goCampaigns(){
+    Navigator.pushNamed(context, 'campaignsPage', arguments: '2');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +58,8 @@ class _MenuPageState extends State<MenuPage> {
                   Icons.explore,
                   color: Colors.blue,
                 ),
-                title: Text("Mis analisis")),
+                title: Text("Mis analisis"),
+                onTap: _irAnalisis,),
             ListTile(
                 leading: Icon(
                   Icons.phone_callback,
@@ -61,6 +70,10 @@ class _MenuPageState extends State<MenuPage> {
                 leading: Icon(Icons.book, color: Colors.red),
                 title: Text("Mis facturas"),
                 onTap: _goFacturas,),
+            ListTile(
+                leading: Icon(Icons.local_hospital, color: Colors.red),
+                title: Text("Campañas"),
+                onTap: _goCampaigns,),
           ],
         ),
       ),

@@ -41,9 +41,10 @@ class _LoginPageState extends State<LoginPage> {
     if (isNotEmpty(userController.text) &&
         isNotEmpty(passwordController.text)) {
       Usuario user = Usuario.fromLogin(userController.text, passwordController.text);
-      int response = await Usuario.loginUser(user);
-      if (response == 1) {
-        _user = user;
+      Usuario response = await Usuario.loginUser(user);
+      if (response != null) {
+        _user = response;
+        _user.setPassword(passwordController.text);
         startTimer();
       } else {
         wrongDataDialog(context, "Usuario no encontrado", 0);

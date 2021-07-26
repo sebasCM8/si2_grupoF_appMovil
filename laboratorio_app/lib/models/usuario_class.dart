@@ -19,36 +19,41 @@ class Usuario {
   Usuario.fromLogin(this._username, this._password);
 
   String getUsername() => this._username;
+  String getPassword() => this._password;
+  int getId()=>this._id;
+  void setPassword(String pasword) => this._password = pasword;
 
-  Usuario.fromMap(Map<String, dynamic> map) {
-    this._ci = map['id'];
-    this._direccion = map['direccion'];
-    this._email = map['email'];
-    this._fechaNacimiento = map['fechaNacimiento'];
-    this._id = map['id'];
-    this._nombre = map['nombre'];
-    this._telefono = map['telefono'];
-  }
-
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     Map<String, dynamic> mapa = {
-      'username':this._username,
+      'username': this._username,
       'password': this._password
     };
     return mapa;
   }
+  /* =======================
+  ======API METHODS =======
+  ========================*/
 
-  static Future<int> loginUser(Usuario user) async{
+  Usuario.fromMap(Map<String, dynamic> map) {
+    this._id = map['id'];
+    this._ci = map['ci'];
+    this._email = map['email'];
+    //this._fechaNacimiento = map['fechaNacimiento'];
+    this._username = map['username'];
+    //this._password = map['password'];
+    //this._telefono = map['telefono'];
+  }
+
+  static Future<Usuario> loginUser(Usuario user) async {
     final url = "https://laboratoriosi.andresmontano.website/api/login";
     Map<String, dynamic> mapa = user.toMap();
-    var response = await http.post(url, body: {
-      'username': mapa['username'],
-      'password': mapa['password']
-    });
-    if(response.statusCode == 200){
-      return 1;
-    }else{
-      return 0;
+    var response = await http.post(url,
+        body: {'username': mapa['username'], 'password': mapa['password']});
+    if (response.statusCode == 200) {
+      Map<String, dynamic> mapp = json.decode(response.body);
+      return Usuario.fromMap(mapp['data']);
+    } else {
+      return null;
     }
   }
 }

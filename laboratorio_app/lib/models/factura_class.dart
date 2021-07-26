@@ -1,4 +1,4 @@
-class Factura{
+class Factura {
   int _id;
   double _descuento;
   String _fecha;
@@ -6,8 +6,9 @@ class Factura{
   double _precioNeto;
   double _precioBruto;
 
-  Factura(this._id, this._descuento, this._fecha, this._nit, this._precioBruto, this._precioNeto);
-  Factura.froMap(Map<String, dynamic> mapa){
+  Factura(this._id, this._descuento, this._fecha, this._nit, this._precioBruto,
+      this._precioNeto);
+  Factura.froMap(Map<String, dynamic> mapa) {
     this._id = mapa['id'];
     this._descuento = mapa['descuento'];
     this._fecha = mapa['fecha'];
@@ -20,5 +21,6 @@ class Factura{
   String getNit() => this._nit;
   double getDescuento() => this._descuento;
   String getFecha() => this._fecha;
-
+  double getPrecioNeto() => this._precioNeto;
+  double getPrecioBruto() => this._precioBruto;
 }

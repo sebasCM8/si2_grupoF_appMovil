@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:laboratorio_app/models/factura_class.dart';
 import 'package:laboratorio_app/models/usuario_class.dart';
+import 'package:laboratorio_app/other_classes/facxuser_param.dart';
 
 class FacturasPage extends StatefulWidget {
   final Usuario user;
@@ -14,7 +15,7 @@ class _FacturasPageState extends State<FacturasPage> {
   List _facturas = [];
 
   void _getFacturas() {
-    for (int i = 1; i < 6; i++) {
+    for (int i = 1; i < 21; i++) {
       Factura fac = Factura(i, 12.0, '19/07/2021', '77767$i', 1000, 950);
       _facturas.add(fac);
     }
@@ -27,28 +28,46 @@ class _FacturasPageState extends State<FacturasPage> {
     _getFacturas();
   }
 
+  void _verFactura(Factura fac){
+    print("hello");
+    FacturaUsuario info = FacturaUsuario(_user, fac);
+    Navigator.pushNamed(context, 'facturaDetallePage', arguments: info);
+  }
+
   Widget _facturaCard(Factura fac) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 20),
-      child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Colors.redAccent,
-            width: 1.5
-          )),
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(8),
-          child: Column(
-            children: [
-              Text('${fac.getId()}'),
-              Text('Nit: ${fac.getNit()}'),
-              Text('Descuento: ${fac.getDescuento()}'),
-              Text('Realizada el: ${fac.getFecha()}')
-            ],
+    return InkWell(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+            child: Icon(Icons.payment, color: Colors.white),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.only(left: 10, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Nit: ${fac.getNit()}', style: TextStyle(fontSize: 17)),
+                Text('Descuento: ${fac.getDescuento()}',
+                    style: TextStyle(fontSize: 17)),
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Realizada el:', style: TextStyle(fontSize: 17)),
+                    Text('${fac.getFecha()}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 17))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
       ),
+      onTap: (){_verFactura(fac);},
     );
   }
 

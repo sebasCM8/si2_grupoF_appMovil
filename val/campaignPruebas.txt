@@ -1,0 +1,279 @@
+import 'package:flutter/material.dart';
+import 'package:laboratorio_app/models/campanias_class.dart';
+import 'package:laboratorio_app/pages/campaign/pruebaCampaniaPage.dart';
+
+// ignore: must_be_immutable
+class Campanias extends StatefulWidget {
+  final String id;
+  Campanias({this.id});
+
+  @override
+  __CampaniasState createState() {
+    return __CampaniasState(id);
+  }
+}
+
+class __CampaniasState extends State<Campanias> {
+  String id;
+  __CampaniasState(this.id);
+  List<Widget> listaDeCards = List.generate(
+      0,
+      (index) => SizedBox(
+            height: 1,
+          ));
+
+  @override
+  void initState() {
+    super.initState();
+    loadListCampanias();
+  }
+
+  Widget loadingDialog(BuildContext context) {
+    return AlertDialog(
+        title: Text("Cargando"),
+        content: Container(
+          height: 80,
+          width: 80,
+          child: Center(child: CircularProgressIndicator()),
+        ));
+  }
+
+  void popDialog(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pop('dialog');
+  }
+
+  void loadListCampanias() async {
+    loadingDialog(context);
+    List result = await Campania.loadCampanias(this.id);
+    print("resultado");
+    print(result);
+
+    setState(() {
+      if (result.isNotEmpty) {
+        result.forEach((item) {
+          var c = card(context, item['id'].toString(), item['title'],
+              item['body'], item['expiration'], item['discount']);
+          listaDeCards.add(c);
+        });
+      } else {
+        popDialog(context);
+      }
+    });
+  }
+
+  Widget listOfCampanias() {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+        itemCount: listaDeCards.length,
+        padding: new EdgeInsets.only(top: 5.0),
+        itemBuilder: (context, index) {
+          return listaDeCards[index];
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: SafeArea(
+        child: SizedBox.expand(
+          child: Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                child: todo(context),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget todo(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: Colors.yellowAccent,
+      padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+      child: Column(
+        children: <Widget>[listOfCampanias()],
+      ),
+    );
+  }
+
+  Widget card(BuildContext context, String id_campania, String title,
+      String body, String expiration, String discount) {
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(height: 5),
+          ListTile(
+            leading: Icon(Icons.add_circle),
+            title: new Text(title),
+            subtitle: Text(body),
+          ),
+          Text('Expira en: ' + expiration.substring(0, 10)),
+          Text('Descuento: ' + discount + " %"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              TextButton(
+                child: Text('Ver prueba'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Tests(id_campania)));
+                },
+              ),
+              SizedBox(width: 8),
+            ],
+          ),
+          SizedBox(height: 5),
+        ],
+      ),
+    );
+  }
+}
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+import 'package:flutter/material.dart';
+import 'package:laboratorio_app/models/prueba_class.dart';
+
+class Tests extends StatefulWidget {
+  String id_campania;
+  Tests(this.id_campania);
+
+  @override
+  __TestsState createState() {
+    return __TestsState(id_campania);
+  }
+}
+
+class __TestsState extends State<Tests> {
+  String id_campania;
+  __TestsState(this.id_campania);
+
+  List<Widget> listaDeCards = List.generate(
+      0,
+      (index) => SizedBox(
+            height: 1,
+          ));
+
+  @override
+  void initState() {
+    super.initState();
+    loadListTests();
+  }
+
+  Widget loadingDialog(BuildContext context) {
+    return AlertDialog(
+        title: Text("Cargando"),
+        content: Container(
+          height: 80,
+          width: 80,
+          child: Center(child: CircularProgressIndicator()),
+        ));
+  }
+
+
+  void popDialog(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pop('dialog');
+  }
+
+  void loadListTests() async {
+    loadingDialog(context);
+    List result = await Prueba.loadTests(id_campania);
+    print("resultado");
+    print(result);
+
+    setState(() {
+      if (result.isNotEmpty) {
+        result.forEach((item) {
+          var c = card(
+              context, item['name'], item['detail'], item['price'].toString());
+          listaDeCards.add(c);
+        });
+      } else {
+        popDialog(context);
+      }
+    });
+  }
+
+  Widget listOfTests() {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+        itemCount: listaDeCards.length,
+        padding: new EdgeInsets.only(top: 5.0),
+        itemBuilder: (context, index) {
+          return listaDeCards[index];
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: SafeArea(
+        child: SizedBox.expand(
+          child: Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                child: todo(context),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget todo(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: Colors.blue,
+      padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+      child: Column(
+        children: <Widget>[listOfTests()],
+      ),
+    );
+  }
+
+  Widget card(BuildContext context, String name, String detail, String price) {
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(height: 5),
+          ListTile(
+            leading: Icon(Icons.add_circle),
+            title: new Text(name),
+            subtitle: Text(detail),
+          ),
+          Text('Precio: ' + price),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              /*TextButton(
+                child: Text(''),
+                onPressed: () {
+
+                },
+              ),*/
+              SizedBox(width: 8),
+            ],
+          ),
+          SizedBox(height: 5),
+        ],
+      ),
+    );
+  }
+}
